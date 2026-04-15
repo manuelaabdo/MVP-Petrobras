@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petrobras PSSP - Gerenciamento de Cibersegurança</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barra Lateral de Navegação -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <i data-lucide="shield-check" class="brand-icon"></i>
+                <div>
+                    <h2 class="brand-title">PSSP</h2>
+                    <span class="brand-sub">Petrobras Zero Trust</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item active" data-target="tunnels">
+                    <i data-lucide="network"></i>
+                    <span>Túneis Micro Seg</span>
+                </div>
+                <div class="nav-item" data-target="crypto">
+                    <i data-lucide="cpu"></i>
+                    <span>IA de Salto (Crypto)</span>
+                </div>
+                <div class="nav-item" data-target="bone">
+                    <i data-lucide="fingerprint"></i>
+                    <span>Auth Condução Óssea</span>
+                </div>
+            </nav>
+            
+            <div class="user-profile">
+                <div class="avatar">AS</div>
+                <div class="user-info">
+                    <span class="name">Admin SecOps</span>
+                    <span class="role">Autorização Master (T0)</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Area Principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="header-titles">
+                    <h1 id="page-title">Gestão de Túneis Micro Segmentados</h1>
+                    <p id="page-desc">Mapeamento em tempo real do tráfego através de nós seguros ZTA.</p>
+                </div>
+                <div class="global-status">
+                    <div class="pulse-ring"></div>
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Firewall Global: ATIVO</span>
+                </div>
+            </header>
+
+            <div class="dashboard-views">
+                <!-- VIEW: Túneis Micro Segmentados -->
+                <section id="tunnels" class="view active fade-in">
+                    <div class="grid-layout">
+                        <!-- Tabela de Túneis -->
+                        <div class="card col-span-2 glass-panel">
+                            <div class="card-header">
+                                <h3>Malha de Túneis ZTA e Autorizações</h3>
+                                <button class="btn btn-outline btn-sm"><i data-lucide="plus"></i> Novo Túnel</button>
+                            </div>
+                            <div class="table-container">
+                                <table id="tunnels-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Nome do Túnel / IP Base</th>
+                                            <th>Tráfego/s</th>
+                                            <th>Permissões</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Preenchido via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Log de Alertas de Interceptação -->
+                        <div class="card glass-panel border-danger">
+                            <div class="card-header">
+                                <h3 class="text-danger"><i data-lucide="alert-triangle"></i> Dropped Packets</h3>
+                            </div>
+                            <ul id="interception-list" class="alert-list">
+                                <!-- Preenchido via JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: IA de Salto com Criptografia Rotativa -->
+                <section id="crypto" class="view fade-in">
+                    <div class="grid-layout">
+                        <!-- Timer e Resumo -->
+                        <div class="card glass-panel center-content col-span-1">
+                            <div class="card-header center">
+                                <h3>Próxima Rotação Entrópica</h3>
+                            </div>
+                            
+                            <div class="donut-timer-container">
+                                <svg width="220" height="220" class="donut">
+                                    <circle cx="110" cy="110" r="100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" />
+                                    <!-- glow effect -->
+                                    <circle cx="110" cy="110" r="100" fill="none" class="donut-progress-glow" stroke-width="12" />
+                                    <circle cx="110" cy="110" r="100" fill="none" class="donut-progress" stroke-width="12" />
+                                </svg>
+                                <div class="timer-text-wrap">
+                                    <div class="timer-value" id="rotation-timer">...</div>
+                                </div>
+                            </div>
+                            
+                            <p class="timer-subtitle">Chaves AES-256-GCM vigentes sendo mascaradas. Sincronização dos IPs Fantasmas em curso.</p>
+                            <button class="btn btn-danger fade-up" id="force-rotation-btn"><i data-lucide="zap"></i> Rotação Crítica Imediata</button>
+                        </div>
+                        
+                        <!-- Lista de IPs Fantasmas -->
+                        <div class="card glass-panel col-span-2">
+                            <div class="card-header">
+                                <h3>Mapeamento: MAC Físico --> IP Fantasma Atual</h3>
+                            </div>
+                            <div class="table-container">
+                                <table id="phantom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dispositivo</th>
+                                            <th>Estado da Rotação</th>
+                                            <th>IP Físico (Interno)</th>
+                                            <th>IP Fantasma (Proxy via IA)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Preenchido via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: Autenticação por Condução Óssea -->
+                <section id="bone" class="view fade-in">
+                     <div class="grid-layout single-col">
+                        <div class="card glass-panel">
+                            <div class="card-header">
+                                <h3>Sessões Biométricas Ativas (Ósseas / Wearables)</h3>
+                                <div class="stats-mini">
+                                    Total de Dispositivos Conectados: <span id="total-wearables" class="text-accent">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table id="bone-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuário</th>
+                                            <th>Wearable Físico</th>
+                                            <th>Freq. Padrão Óssea</th>
+                                            <th>Uptime Sessão Contínua</th>
+                                            <th>Ações de Socorro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Preenchido via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal Confirmação IA -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-box glass-panel">
+            <h3 class="text-danger"><i data-lucide="alert-octagon"></i> Confirmar Rotação Crítica</h3>
+            <p>Isto invalidará todas as chaves em curso prematuramente e remapeará todos os IPs fantasmas. Causará perda de conexão temporária de ~120ms na plataforma inteira.</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancel-modal-btn">Cancelar</button>
+                <button class="btn btn-danger" id="confirm-rotation-btn">Executar Override</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Internos e Inicializadores -->
+    <script src="app.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>
