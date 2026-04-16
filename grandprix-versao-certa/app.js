@@ -1,4 +1,4 @@
-// Petrobras ZTA - Mock Application Logic
+// Petrobras SSUP - Mock Application Logic
 
 const AppState = {
     currentTab: 'tunnels',
