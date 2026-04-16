@@ -68,7 +68,7 @@ function initNavigation() {
 
     const titles = {
         'tunnels': { title: 'Gestão de Túneis Micro Segmentados', desc: 'Mapeamento em tempo real do tráfego através de nós seguros ZTA.' },
-        'crypto': { title: 'IA de Salto com Criptografia Rotativa', desc: 'Monitoramento da entropia dinâmica de chaves e IPs mascarados (Fantasmas).' },
+        'crypto': { title: 'Defesa de alvo móvel', desc: 'Monitoramento da dinâmica de chaves e IPs mascarados (Fantasmas).' },
         'bone': { title: 'Autenticação por Condução Óssea', desc: 'Controle contínuo de vitalidade e prova de presença física por wearables.' },
     };
 
