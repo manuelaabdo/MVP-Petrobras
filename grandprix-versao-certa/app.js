@@ -18,12 +18,47 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBoneSessions();
     startCryptoTimer();
     startInterceptsSim();
-    
+
     // Modal Overrides
     document.getElementById('force-rotation-btn').addEventListener('click', showModal);
     document.getElementById('cancel-modal-btn').addEventListener('click', hideModal);
     document.getElementById('confirm-rotation-btn').addEventListener('click', executeCryptoRotation);
+
+    // Theme setup
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleTheme);
+    }
+    updateThemeIcon();
 });
+
+// ----------------------------------------
+// Theme Functions
+// ----------------------------------------
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    const icon = document.getElementById('theme-icon');
+    if (!icon) return;
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    if (currentTheme === 'dark') {
+        icon.setAttribute('data-lucide', 'sun');
+    } else {
+        icon.setAttribute('data-lucide', 'moon');
+    }
+
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+}
 
 function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
@@ -40,13 +75,13 @@ function initNavigation() {
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             const target = item.getAttribute('data-target');
-            
+
             navItems.forEach(nav => nav.classList.remove('active'));
             item.classList.add('active');
-            
+
             views.forEach(view => view.classList.remove('active'));
             document.getElementById(target).classList.add('active');
-            
+
             pageTitle.innerText = titles[target].title;
             pageDesc.innerText = titles[target].desc;
         });
@@ -81,13 +116,13 @@ function initMockData() {
 function renderTunnels() {
     const tbody = document.querySelector('#tunnels-table tbody');
     tbody.innerHTML = '';
-    
+
     AppState.tunnels.forEach(t => {
         let badgeClass = 'badge-success';
         let icon = '<i data-lucide="check-circle"></i>';
         let statusText = 'Em Operação';
-        
-        if(t.status === 'maintenance') {
+
+        if (t.status === 'maintenance') {
             badgeClass = 'badge-warning';
             icon = '<i data-lucide="tool"></i>';
             statusText = 'Manutenção / Fechado';
@@ -115,19 +150,19 @@ function renderTunnels() {
 function startInterceptsSim() {
     const list = document.getElementById('interception-list');
     const ipsAtacantes = ['189.2.xxx.xx', '45.12.xxx.xx', '221.4.xxx.xx'];
-    
+
     setInterval(() => {
         const tr = document.createElement('li');
         tr.className = 'alert-item';
         const atIp = ipsAtacantes[Math.floor(Math.random() * ipsAtacantes.length)];
-        
+
         tr.innerHTML = `
             <p><strong>Acesso Negado Pelo ZTA</strong></p>
             <span class="ip">Source: ${atIp} -> Target: Túnel Rígido</span><br>
             <span class="text-secondary" style="font-size: 0.75rem;">Motivo: Assinatura Óssea Ausente</span>
         `;
         list.prepend(tr);
-        if(list.children.length > 5) list.removeChild(list.lastChild);
+        if (list.children.length > 5) list.removeChild(list.lastChild);
     }, 6500);
 }
 
@@ -138,7 +173,7 @@ function startCryptoTimer() {
     const timerDisplay = document.getElementById('rotation-timer');
     const circle = document.querySelector('.donut-progress');
     const glow = document.querySelector('.donut-progress-glow');
-    
+
     // circunferência = 2 * pi * r (r=100) = ~628
     const circumference = 2 * Math.PI * 100;
     circle.style.strokeDasharray = circumference;
@@ -146,9 +181,9 @@ function startCryptoTimer() {
 
     const updateTimer = () => {
         AppState.cryptoRotationTimeLeft--;
-        
+
         if (AppState.cryptoRotationTimeLeft <= 0) {
-            executeCryptoRotation(false); 
+            executeCryptoRotation(false);
         }
 
         const mins = Math.floor(AppState.cryptoRotationTimeLeft / 60);
@@ -160,7 +195,7 @@ function startCryptoTimer() {
         const offset = circumference - (ratio * circumference);
         circle.style.strokeDashoffset = offset;
         glow.style.strokeDashoffset = offset;
-        
+
         // Cuidado/Critico style changes
         if (AppState.cryptoRotationTimeLeft < 30) {
             circle.style.stroke = 'var(--danger)';
@@ -172,7 +207,7 @@ function startCryptoTimer() {
             timerDisplay.style.color = 'var(--accent)';
         }
     };
-    
+
     updateTimer();
     AppState.timerInterval = setInterval(updateTimer, 1000);
 }
@@ -190,14 +225,14 @@ function executeCryptoRotation(fromInterface = true) {
     if (fromInterface) {
         hideModal();
     }
-    
+
     clearInterval(AppState.timerInterval);
-    
+
     const timerDisplay = document.getElementById('rotation-timer');
     timerDisplay.innerText = "ROT...";
     document.querySelector('.donut-progress').style.strokeDashoffset = 0;
     document.querySelector('.donut-progress-glow').style.strokeDashoffset = 0;
-    
+
     setTimeout(() => {
         processIPSwapSimul();
         AppState.cryptoRotationTimeLeft = AppState.cryptoRotationTimeTotal;
@@ -208,12 +243,12 @@ function executeCryptoRotation(fromInterface = true) {
 function renderPhantomDevices() {
     const tbody = document.querySelector('#phantom-table tbody');
     tbody.innerHTML = '';
-    
+
     AppState.phantomDevices.forEach(d => {
         let sc = 'badge-success';
-        if(d.status === 'Suspeito') sc = 'badge-warning';
-        if(d.status === 'Em Salto') sc = 'badge-accent';
-        
+        if (d.status === 'Suspeito') sc = 'badge-warning';
+        if (d.status === 'Em Salto') sc = 'badge-accent';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>${d.type}</strong><br><small class="text-secondary">${d.id}</small></td>
@@ -232,14 +267,14 @@ function renderBoneSessions() {
     const tbody = document.querySelector('#bone-table tbody');
     document.getElementById('total-wearables').innerText = AppState.boneSessions.length;
     tbody.innerHTML = '';
-    
+
     AppState.boneSessions.forEach((s, idx) => {
         const isCritical = s.status === 'critical';
-        const mins = s.uptime; 
-        
+        const mins = s.uptime;
+
         let rowClass = isCritical ? 'style="background: rgba(255, 77, 77, 0.1); border: 1px solid var(--danger);"' : '';
         let warnText = isCritical ? `<span class="text-danger"><i data-lucide="alert-circle"></i> Extremamente Alto (${mins}m)</span>` : `<span class="text-success">${mins}m (Normal)</span>`;
-        
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td ${rowClass}><strong>${s.user}</strong></td>
@@ -255,8 +290,8 @@ function renderBoneSessions() {
     lucide.createIcons();
 }
 
-window.killSession = function(index) {
-    if(confirm('Tem certeza? Isso expulsará instantaneamente o dispositivo da rede de túneis via ZTA.')) {
+window.killSession = function (index) {
+    if (confirm('Tem certeza? Isso expulsará instantaneamente o dispositivo da rede de túneis via ZTA.')) {
         AppState.boneSessions.splice(index, 1);
         renderBoneSessions();
     }
